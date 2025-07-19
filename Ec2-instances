@@ -1,0 +1,51 @@
+provider "aws" {
+  alias  = "Ohio"
+  region = "us-east-2"
+}
+
+provider "aws" {
+  alias  = "Oregon"
+  region = "us-west-2"
+}
+
+ 🔐 Key Pair Variables
+variable "key_us_east" {
+  default = "summa"  # Replace with your real key pair name
+}
+
+variable "key_us_west" {
+  default = "security"  # Replace with your real key pair name
+}
+
+# 🖼️ AMI Variables
+variable "ami_us_east" {
+  default = "ami-0d1b5a8c13042c939"  # Valid in us-east-2 (Ohio)
+}
+
+variable "ami_us_west" {
+  default = "ami-05f991c49d264708f"  # Valid in us-west-2 (Oregon)
+}
+
+# 💻 EC2 in Ohio (us-east-2)
+resource "aws_instance" "ec2_us_east" {
+  provider      = aws.Ohio
+  ami           = var.ami_us_east
+  instance_type = "t2.micro"
+  key_name      = var.key_us_east
+
+  tags = {
+    Name = "Bujii-Ohio-Instance"
+  }
+}
+
+# 💻 EC2 in Oregon (us-west-2)
+resource "aws_instance" "ec2_us_west" {
+  provider      = aws.Oregon
+  ami           = var.ami_us_west
+  instance_type = "t2.micro"
+  key_name      = var.key_us_west
+
+  tags = {
+    Name = "Bujii-Oregon-Instance"
+  }
+}
